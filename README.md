@@ -2,15 +2,13 @@
 
 ## About
 
-MicroScope is an RShiny and JavaScript (D3.js) software program designed to produce dynamic, interactive heatmaps in an Internet browser.
+MicroScope is an RShiny and JavaScript (D3.js) software program designed to produce dynamic, interactive heatmaps in a web browser.
 
-MicroScope allows you to magnify any portion of a heatmap by a simple click-and-drag feature to zoom in, and click-once feature to zoom out.
+MicroScope allows you to magnify any portion of a heatmap by a simple click-and-drag feature to zoom in, and a click-once feature to zoom out.
 
 MicroScope is designed with large heatmaps in mind (e.g., gene expression heatmaps with thousands of genes), where individual entries quickly become unreadable as more are added. 
 
-However, MicroScope allows you to repeatedly zoom in to any sector of the heatmap to investigate a region, cluster, or even a single gene.  
-
-MicroScope also allows you to hover the mouse pointer over any specific gene to show precise expression level details.
+However, MicroScope allows you to repeatedly zoom in to any sector of the heatmap to investigate a region, cluster, or even a single gene.  You can scroll up and down the page of your web browser to see more genes than fit your window.  MicroScope also allows you to hover the mouse pointer over any specific gene to show precise expression level details.  As such, MicroScope presents a significant advance in heatmap visualization technology over current standard protocols.       
 
 ## Installation
 
