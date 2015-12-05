@@ -1,4 +1,4 @@
-# Microscope
+# MicroScope
 
 ## About
 
