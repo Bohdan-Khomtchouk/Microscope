@@ -31,6 +31,6 @@ MicroScope is an RShiny and JavaScript (D3.js) software program designed to prod
 
 <img width="1264" alt="image4" src="https://cloud.githubusercontent.com/assets/9893806/11605854/7ed04dea-9ad8-11e5-8556-3f76e9ee63b4.png">
 
-<img width="1440" alt="image5" src="https://cloud.githubusercontent.com/assets/9893806/11605855/8088db8e-9ad8-11e5-90fe-651806b87eb4.png">
+<img width="1440" alt="image5" src="https://cloud.githubusercontent.com/assets/9893806/11605921/21fa1152-9adb-11e5-9f5f-c15a052b051f.png">
 
 <img width="1439" alt="image6" src="https://cloud.githubusercontent.com/assets/9893806/11605857/8217f5e8-9ad8-11e5-8187-4c052254b684.png">
