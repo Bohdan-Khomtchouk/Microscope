@@ -35,7 +35,7 @@
 
 library(d3heatmap)
 library(shiny)
-
+library(RColorBrewer)
 
 pwd<-"/path/to/my_directory/MICROSCOPE/genes_file.csv"
 genes<-read.csv(pwd, header= TRUE, sep=",", quote= '"',row.names=1)
@@ -52,7 +52,7 @@ shinyUI(pageWithSidebar(
 	
 	type="tabs",
 	
-	tabPanel("Interactive! Heatmap", d3heatmap(genes.numeric, dendrogram ="row", color ="Greens", width = "150%", height = "1000px", cexRow=0.5)),
+	tabPanel("Interactive! Heatmap", d3heatmap(genes.numeric, dendrogram ="row", color = brewer.pal(3, "RdYlBu"), width = "150%", height = "1000px", cexRow=0.5)),
 	
 	tabPanel("Instructions",textInput("text", label=h3("Click-and-drag to zoom in. Click-once to zoom out."), value="It's that easy!"))
 )
