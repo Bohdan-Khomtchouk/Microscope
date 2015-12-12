@@ -35,7 +35,6 @@
 library(d3heatmap)
 library(shiny)
 library(RColorBrewer)
-library(colorspace)
 
 
 # preprocessing
@@ -45,32 +44,18 @@ genes.numeric <- data.matrix(genes)
 
 
 # frontend
-#ui <- shinyUI(fluidPage(	#if you want to create a fileInput feature, you MUST use shinyUI as shown here
 ui <- fluidPage(
 	h1("MicroScope"),
-	#fileInput("filename", "Choose file to upload", accept = c('text/csv', 'text/comma-separated-values', 'text/tab-separated-values', 'text/plain', '.csv', '.tsv')),	#this works without problems
 	selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
 	checkboxInput("cluster", "Apply clustering"),
-	#mainPanel(d3heatmapOutput("heatmap"))		#must use mainPanel() environment when using shinyUI environment
 	d3heatmapOutput("heatmap")
 )
 
 
 # backend 
-#server <- shinyServer(function(input, output) {		#once again, use this when attempting fileInput
-
 server <- function(input, output) {
   output$heatmap <- renderD3heatmap({
   
-	#inFile <- input$filename		#try this when attempting fileInput
-
-    #if (is.null(inFile))		#try this when attempting fileInput
-      #return(NULL)				#try this when attempting fileInput
-
-    #z <- read.csv(inFile, header= TRUE, sep=",", quote= '"',row.names=1)		#try this when attempting fileInput
-    
-    #genes.numeric <- data.matrix(z)		#try this when attempting fileInput
-    
 	d3heatmap( 
 		genes.numeric,
         cexRow=0.5,
@@ -80,7 +65,6 @@ server <- function(input, output) {
     
   })
   	}
-#})		#don't forget these guys when trying to incorporate fileInput
 
 
 # run app  
