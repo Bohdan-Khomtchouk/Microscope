@@ -35,6 +35,7 @@
 library(d3heatmap)
 library(shiny)
 library(RColorBrewer)
+library(colorspace)
 
 
 # preprocessing
@@ -43,34 +44,44 @@ genes<-read.csv(pwd, header= TRUE, sep=",", quote= '"',row.names=1)
 genes.numeric <- data.matrix(genes)
 
 
-# color schemes
-x <- colorRamp(c("green", "black", "red"), space = "rgb")
-y <- colorRamp(c("blue", "white", "red"), space = "rgb")
-newList <- list("GBR" = x, "BWR" = y)
-
-
 # frontend
+#ui <- shinyUI(fluidPage(	#if you want to create a fileInput feature, you MUST use shinyUI as shown here
 ui <- fluidPage(
-	h1("Interactive! Heatmap"),
-	selectInput("newList", "newList", c("GBR", "BWR")),
+	h1("MicroScope"),
+	#fileInput("filename", "Choose file to upload", accept = c('text/csv', 'text/comma-separated-values', 'text/tab-separated-values', 'text/plain', '.csv', '.tsv')),	#this works without problems
+	selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
+	checkboxInput("cluster", "Apply clustering"),
+	#mainPanel(d3heatmapOutput("heatmap"))		#must use mainPanel() environment when using shinyUI environment
 	d3heatmapOutput("heatmap")
-) 
- 
- 
-# backend 
-server <- function(input, output, session) {
-      
-      output$heatmap <- renderD3heatmap({
-        d3heatmap(
-          genes.numeric,
-          dendrogram="row",
-          colors= newList$GBR,		#can also be colors= newList$BWR
-          width = "150%", 
-          height = "1000px", 
-          cexRow=0.5)
-        
- })
-    }
+)
 
-#run app  
+
+# backend 
+#server <- shinyServer(function(input, output) {		#once again, use this when attempting fileInput
+
+server <- function(input, output) {
+  output$heatmap <- renderD3heatmap({
+  
+	#inFile <- input$filename		#try this when attempting fileInput
+
+    #if (is.null(inFile))		#try this when attempting fileInput
+      #return(NULL)				#try this when attempting fileInput
+
+    #z <- read.csv(inFile, header= TRUE, sep=",", quote= '"',row.names=1)		#try this when attempting fileInput
+    
+    #genes.numeric <- data.matrix(z)		#try this when attempting fileInput
+    
+	d3heatmap( 
+		genes.numeric,
+        cexRow=0.5,
+        colors = input$choose,
+        dendrogram = if (input$cluster) "row" else "none"
+        )
+    
+  })
+  	}
+#})		#don't forget these guys when trying to incorporate fileInput
+
+
+# run app  
 shinyApp(ui, server)

@@ -32,49 +32,26 @@
 
 # ------------------------------------------------------------------------------------
 
-library(d3heatmap)
 library(shiny)
 
-
+options(shiny.maxRequestSize = 10*1024^2)	#file size limit is currently set at 10 MB
 
 shinyServer(function(input, output) {
-  output$contents <- renderTable({
-    pwd<-"/path/to/my_directory/MICROSCOPE/genes_file.csv"
-genes.numeric<-read.csv(pwd, header= TRUE, sep=",", quote= '"',row.names=1)
-    # input$file1 will be NULL initially. After the user selects and uploads a 
-    # file, it will be a data frame with 'name', 'size', 'type', and 'datapath' 
-    # columns. The 'datapath' column will contain the local filenames where the 
-    # data can be found.
-
-data <- reactive({
-    dist <- switch(input$dist,
-                   norm = rnorm,
-                   unif = runif,
-                   lnorm = rlnorm,
-                   exp = rexp,
-                   rnorm)
-    
-    dist(input$n)
-  })
-   output$summary <- renderPrint({
-     dataset <- datasetInput()
-
-    capture.output(summary(dataset),file="genes.numeric")
-
-  })
+  output$heatmap <- renderD3heatmap({
   
-   	output$bake<-renderPrint({(genes.numeric[row.names(genes.numeric)=="geneA ",])})
+	inFile <- input$filename
 
-	datasetInput<- reactive({
-   	output$something<-renderPrint({(genes.numeric[row.names(genes.numeric)=="geneA ",])})
-      output$names <- input$text
-	output$something2<-renderPlot({plot(genes.numeric$entry1,genes.numeric$entry2)})
-	output$color<-input$color
- 	inFile <- input$file1
-    	if (is.null(inFile))return(NULL)
-     percent<-input$percentage
-	output$table<-read.csv(inFile$datapath, header=input$header, sep=input$sep, quote=input$quote)})
-    output$rtable<-renderDataTable( table())
- 
+    if (is.null(inFile))
+      return(NULL)
+
+    z <- read.csv(inFile, header= TRUE, sep=",", quote= '"',row.names=1)
+    
+	d3heatmap( 
+		z,
+        cexRow=0.5,
+        colors = input$choose,
+        dendrogram = if (input$cluster) "row" else "none"
+        )
+    
   })
 })
