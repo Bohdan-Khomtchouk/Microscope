@@ -32,20 +32,35 @@
 
 # ------------------------------------------------------------------------------------
 
+library(shiny)
+library(ggplot2)
 
 # backend 
 server <- shinyServer(function(input, output) {	
 
 	datasetInput <- reactive({
-  
     	inFile <- input$filename
-    
     	if (is.null(inFile)) return(NULL)
-    
     	data.matrix(read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1))
-    
 							})
-  
+	
+  	plotInput <- reactive({
+    	df <- datasetInput()
+    	p <-ggplot(df, aes_string(x=names(df)[1], y=names(df)[2])) + geom_point()
+  	})
+
+	output$plot <- renderPlot({
+    	print(plotInput())
+  	})
+
+  	output$downloadPlot <- downloadHandler(
+    	filename = function() { 
+    	paste(input$filename, '.png', sep='') },
+    	content = function(file) {
+      		ggsave(file,plotInput())
+    	}
+  	)
+    
     output$heatmap<-renderD3heatmap(
     
     	if(!is.null(datasetInput()))
@@ -57,4 +72,5 @@ server <- shinyServer(function(input, output) {
       			dendrogram = if (input$cluster) "row" else "none"
     				)  
   									)
+  
 												})
