@@ -29,14 +29,4 @@ Please cite: "Khomtchouk et al.: 'MicroScope: magnifying interactive heatmaps us
 
 ## Screenshots
 
-<img width="1440" alt="image1" src="https://cloud.githubusercontent.com/assets/9893806/11605850/75c634f8-9ad8-11e5-83af-3cfa6a6387e5.png">
-
-<img width="1440" alt="image2" src="https://cloud.githubusercontent.com/assets/9893806/11605851/7b3ddae4-9ad8-11e5-8f15-51e16b581beb.png">
-
-<img width="1440" alt="image3" src="https://cloud.githubusercontent.com/assets/9893806/11605852/7ce2319c-9ad8-11e5-8d40-e2dfadd767f0.png">
-
-<img width="1264" alt="image4" src="https://cloud.githubusercontent.com/assets/9893806/11605854/7ed04dea-9ad8-11e5-8556-3f76e9ee63b4.png">
-
-<img width="1440" alt="image5" src="https://cloud.githubusercontent.com/assets/9893806/11605921/21fa1152-9adb-11e5-9f5f-c15a052b051f.png">
-
-<img width="1439" alt="image6" src="https://cloud.githubusercontent.com/assets/9893806/11605857/8217f5e8-9ad8-11e5-8187-4c052254b684.png">
+<img width="1440" alt="screen shot 2015-12-15 at 11 48 53 pm" src="https://cloud.githubusercontent.com/assets/9893806/11832500/c4bfa43e-a386-11e5-8d5c-4d869d6d904b.png">
