@@ -35,6 +35,7 @@
 library(d3heatmap)
 library(shiny)
 library(RColorBrewer)
+library(ggplot2)
 
 # frontend
 ui <- shinyUI(pageWithSidebar(
@@ -44,9 +45,15 @@ ui <- shinyUI(pageWithSidebar(
   sidebarPanel(
     	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
-		checkboxInput("cluster", "Apply Clustering")
+		checkboxInput("cluster", "Apply Clustering"),
+		downloadButton('downloadPlot', 'Download Heatmap')
                ),
                
-  mainPanel(d3heatmapOutput("heatmap", width = "800px", height = "800px"))
+  mainPanel(
+  		tabsetPanel(
+  			tabPanel("Instructions", textInput("text", label=h3("Upload a .csv file. Click and drag to zoom in. Click once to zoom out."), value="It's that easy!")),
+  			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "800px", height = "800px"))
+  					)
+  			)
 							)
 			)
