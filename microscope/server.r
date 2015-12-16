@@ -32,26 +32,28 @@
 
 # ------------------------------------------------------------------------------------
 
-library(shiny)
 
-options(shiny.maxRequestSize = 10*1024^2)	#file size limit is currently set at 10 MB
-
-shinyServer(function(input, output) {
-  output$heatmap <- renderD3heatmap({
-  
-	inFile <- input$filename
-
-    if (is.null(inFile))
+# backend 
+server <- shinyServer(function(input, output) {	
+  datasetInput <- reactive({
+    inFileTwo <- input$filename
+    
+    if (is.null(inFileTwo))
       return(NULL)
+  
+     data.matrix(read.table(inFileTwo$datapath, header= TRUE, sep=",", quote='"', row.names=1))
+    
 
-    z <- read.csv(inFile, header= TRUE, sep=",", quote= '"',row.names=1)
-    
-	d3heatmap( 
-		z,
-        cexRow=0.5,
-        colors = input$choose,
-        dendrogram = if (input$cluster) "row" else "none"
-        )
-    
   })
-})
+  
+    output$heatmap<-renderD3heatmap(
+    
+    if(!is.null(datasetInput()))
+ 		d3heatmap( 
+      		datasetInput(),
+      		cexRow=0.5,
+      		colors = input$choose,
+      		dendrogram = if (input$cluster) "row" else "none"
+    			)  
+  									) 
+											})
