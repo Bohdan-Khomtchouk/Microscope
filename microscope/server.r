@@ -35,25 +35,26 @@
 
 # backend 
 server <- shinyServer(function(input, output) {	
-  datasetInput <- reactive({
-    inFileTwo <- input$filename
-    
-    if (is.null(inFileTwo))
-      return(NULL)
-  
-     data.matrix(read.table(inFileTwo$datapath, header= TRUE, sep=",", quote='"', row.names=1))
-    
 
-  })
+	datasetInput <- reactive({
+  
+    	inFile <- input$filename
+    
+    	if (is.null(inFile)) return(NULL)
+    
+    	data.matrix(read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1))
+    
+							})
   
     output$heatmap<-renderD3heatmap(
     
-    if(!is.null(datasetInput()))
- 		d3heatmap( 
-      		datasetInput(),
-      		cexRow=0.5,
-      		colors = input$choose,
-      		dendrogram = if (input$cluster) "row" else "none"
-    			)  
-  									) 
-											})
+    	if(!is.null(datasetInput()))
+    	
+ 			d3heatmap( 
+      			datasetInput(),
+      			cexRow=0.5,
+      			colors = input$choose,
+      			dendrogram = if (input$cluster) "row" else "none"
+    				)  
+  									)
+												})
