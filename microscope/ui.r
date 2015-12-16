@@ -38,12 +38,15 @@ library(RColorBrewer)
 
 # frontend
 ui <- shinyUI(pageWithSidebar(
+
   headerPanel("MicroScope"),
+  
   sidebarPanel(
-    	fileInput("filename", "Choose file to upload", accept = c('text/csv', 'text/comma-separated-values', 'text/tab-separated-values', 'text/plain', '.csv', '.tsv')),
+    	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
-		checkboxInput("cluster", "Apply clustering")
+		checkboxInput("cluster", "Apply Clustering")
                ),
+               
   mainPanel(d3heatmapOutput("heatmap", width = "800px", height = "800px"))
 							)
 			)
