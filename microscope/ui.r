@@ -36,36 +36,14 @@ library(d3heatmap)
 library(shiny)
 library(RColorBrewer)
 
-
-# preprocessing
-pwd<-"/Users/bohdankhomtchouk/Desktop/Microscope/genes_file.csv"
-genes<-read.csv(pwd, header= TRUE, sep=",", quote= '"',row.names=1)
-genes.numeric <- data.matrix(genes)
-
-
 # frontend
-ui <- fluidPage(
-	h1("MicroScope"),
-	selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
-	checkboxInput("cluster", "Apply clustering"),
-	d3heatmapOutput("heatmap")
-)
-
-
-# backend 
-server <- function(input, output) {
-  output$heatmap <- renderD3heatmap({
-  
-	d3heatmap( 
-		genes.numeric,
-        cexRow=0.5,
-        colors = input$choose,
-        dendrogram = if (input$cluster) "row" else "none"
-        )
-    
-  })
-  	}
-
-
-# run app  
-shinyApp(ui, server)
+ui <- shinyUI(pageWithSidebar(
+  headerPanel("MicroScope"),
+  sidebarPanel(
+    	fileInput("filename", "Choose file to upload", accept = c('text/csv', 'text/comma-separated-values', 'text/tab-separated-values', 'text/plain', '.csv', '.tsv')),
+  		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
+		checkboxInput("cluster", "Apply clustering")
+               ),
+  mainPanel(d3heatmapOutput("heatmap", width = "800px", height = "800px"))
+							)
+			)
