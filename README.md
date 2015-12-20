@@ -8,11 +8,11 @@ MicroScope is an ongoing bioinformatics software project fully financially suppo
 
 Current work is underway to expand Microscope's user-friendly features (e.g., multiple color schemes, download button, etc).
 
-Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “MicroScope: magnifying interactive gene expression heatmaps with RShiny and JavaScript”. bioRxiv doi: http://dx.doi.org/10.1101/034694." within any source that makes use of any methods inspired by MicroScope. 
+Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “MicroScope: magnifying interactive gene expression heatmaps with RShiny and JavaScript”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope. 
 
 ## Usage (for general public)
 
-##### Just click here!: https://microscope.shinyapps.io/microscope
+##### Just click here!... https://microscope.shinyapps.io/microscope
 
 ## Installation (for developers only)
 
