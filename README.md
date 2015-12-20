@@ -8,22 +8,29 @@ MicroScope is an ongoing bioinformatics software project fully financially suppo
 
 Current work is underway to expand Microscope's user-friendly features (e.g., multiple color schemes, download button, etc).
 
-Please cite: "Khomtchouk et al.: 'MicroScope: magnifying interactive heatmaps with RShiny and JavaScript', 2015 (in preparation)" within any source that makes use of any methods inspired by MicroScope. 
+Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “MicroScope: magnifying interactive gene expression heatmaps with RShiny and JavaScript”. bioRxiv doi: http://dx.doi.org/10.1101/034694." within any source that makes use of any methods inspired by MicroScope. 
 
-## Installation
+## Usage (for general public)
 
-### Requirements
+##### Just click here!: https://microscope.shinyapps.io/microscope
+
+## Installation (for developers only)
+
+### Requirements for developers
 
 * R programming language
   * RStudio
 
-## How to run
+## How to run (for developers only)
 
 ##### Git clone this repo to your computer, and in RStudio type:
 * `setwd("~/path/to/my_directory/Microscope")`
 * `install.packages("d3heatmap")`
+* `library(d3heatmap)`
 * `install.packages("shiny")`
+* `library(shiny)`
 * `install.packages("ggplot2")`
+* `library(ggplot2)`
 * `runApp("microscope")`
 
 ## Screenshots
