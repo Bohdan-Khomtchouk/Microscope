@@ -41,25 +41,9 @@ server <- shinyServer(function(input, output) {
 	datasetInput <- reactive({
     	inFile <- input$filename
     	if (is.null(inFile)) return(NULL)
-    	data.matrix(read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1))
+    	read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1)
 							})
-	
-  	plotInput <- reactive({
-    	df <- datasetInput()
-    	p <-ggplot(df, aes_string(x=names(df)[1], y=names(df)[2])) + geom_point()
-  	})
-
-	output$plot <- renderPlot({
-    	print(plotInput())
-  	})
-
-  	output$downloadPlot <- downloadHandler(
-    	filename = function() { 
-    	paste(input$filename, '.png', sep='') },
-    	content = function(file) {
-      		ggsave(file,plotInput())
-    	}
-  	)
+							
     
     output$heatmap<-renderD3heatmap(
     
@@ -69,8 +53,23 @@ server <- shinyServer(function(input, output) {
       			datasetInput(),
       			cexRow=0.5,
       			colors = input$choose,
-      			dendrogram = if (input$cluster) "row" else "none"
+      			k_row = input$color_row_branches,
+      			k_col = input$color_column_branches,
+      			dendrogram = input$dendrogram
     				)  
   									)
+  									
+	plotInput <- reactive({
+		output$heatmap
+  	})
+  	
+  									
+    output$downloadPlot <- downloadHandler(
+    	filename = function() { 
+    	paste(input$filename, '.png', sep='') },
+    	content = function(file) {
+			ggsave(file)
+    	}
+  	)
   
 												})
