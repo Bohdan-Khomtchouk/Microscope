@@ -35,6 +35,9 @@ Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “M
 
 ## Screenshots
 
-<img width="1440" alt="screen shot 2015-12-15 at 11 58 08 pm" src="https://cloud.githubusercontent.com/assets/9893806/11832651/7243547e-a388-11e5-958d-5358a9c4b9e1.png">
+<img width="1440" alt="pic1" src="https://cloud.githubusercontent.com/assets/9893806/11985011/aecd4088-a98e-11e5-9e7d-b079c440e528.png">
 
-<img width="1440" alt="zoomed_in" src="https://cloud.githubusercontent.com/assets/9893806/11832658/8bb7f036-a388-11e5-99be-2a20a5baa9a1.png">
+<img width="1440" alt="pic2" src="https://cloud.githubusercontent.com/assets/9893806/11985017/b6d04424-a98e-11e5-93ea-2acd4664b406.png">
+
+<img width="1440" alt="pic3" src="https://cloud.githubusercontent.com/assets/9893806/11985021/ba9bcd62-a98e-11e5-9463-ec5ee1e189c6.png">
+
