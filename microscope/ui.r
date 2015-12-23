@@ -45,7 +45,9 @@ ui <- shinyUI(pageWithSidebar(
   sidebarPanel(
     	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
-		checkboxInput("cluster", "Apply Clustering"),
+  		selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
+		selectInput("color_row_branches", "Color Row Branches:", c(1:20)),
+		selectInput("color_column_branches", "Color Column Branches:", c(1:20)),
 		downloadButton('downloadPlot', 'Download Heatmap')
                ),
                
