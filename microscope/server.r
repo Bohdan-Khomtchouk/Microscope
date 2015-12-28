@@ -35,7 +35,6 @@
 library(shiny)
 library(d3heatmap)
 library(htmlwidgets)
-library(tools)
 
 # backend 
 server <- shinyServer(function(input, output) {	
