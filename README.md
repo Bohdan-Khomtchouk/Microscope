@@ -33,8 +33,6 @@ Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “M
 * `library(RColorBrewer)`
 * `install.packages("htmlwidgets")`
 * `library(htmlwidgets)`
-* `install.packages("tools")`
-* `library(tools)`
 * `runApp("microscope")`
 
 ## Screenshots
