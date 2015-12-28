@@ -6,7 +6,7 @@ MicroScope is an RShiny and JavaScript (D3.js) software program designed to prod
 
 MicroScope is an ongoing bioinformatics software project fully financially supported by the United States Department of Defense (DoD) through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
-Current work is underway to expand Microscope's user-friendly features (e.g., multiple color schemes, download button, etc).
+Current work is underway to expand Microscope's user-friendly features (e.g., multiple color schemes, download button, dendrogram coloring, font size, etc).
 
 Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “MicroScope: magnifying interactive gene expression heatmaps with RShiny and JavaScript”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope. 
 
@@ -25,19 +25,22 @@ Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C.  “M
 
 ##### Git clone this repo to your computer, and in RStudio type:
 * `setwd("~/path/to/my_directory/Microscope")`
-* `install.packages("d3heatmap")`
-* `library(d3heatmap)`
 * `install.packages("shiny")`
 * `library(shiny)`
-* `install.packages("ggplot2")`
-* `library(ggplot2)`
+* `install.packages("d3heatmap")`
+* `library(d3heatmap)`
+* `install.packages("RColorBrewer")`
+* `library(RColorBrewer)`
+* `install.packages("htmlwidgets")`
+* `library(htmlwidgets)`
+* `install.packages("tools")`
+* `library(tools)`
 * `runApp("microscope")`
 
 ## Screenshots
 
-<img width="1440" alt="pic1" src="https://cloud.githubusercontent.com/assets/9893806/11985011/aecd4088-a98e-11e5-9e7d-b079c440e528.png">
+<img width="1440" alt="ui1" src="https://cloud.githubusercontent.com/assets/9893806/12013278/45295e22-ace1-11e5-9135-e5ea5698f851.png">
 
-<img width="1440" alt="pic2" src="https://cloud.githubusercontent.com/assets/9893806/11985017/b6d04424-a98e-11e5-93ea-2acd4664b406.png">
+<img width="1440" alt="ui2" src="https://cloud.githubusercontent.com/assets/9893806/12013279/4ae82488-ace1-11e5-8011-e94842698d61.png">
 
-<img width="1440" alt="pic3" src="https://cloud.githubusercontent.com/assets/9893806/11985021/ba9bcd62-a98e-11e5-9463-ec5ee1e189c6.png">
-
+<img width="1440" alt="ui3" src="https://cloud.githubusercontent.com/assets/9893806/12013281/4fcb7bbc-ace1-11e5-9614-011083827afd.png">
