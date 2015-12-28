@@ -33,7 +33,9 @@
 # ------------------------------------------------------------------------------------
 
 library(shiny)
-library(ggplot2)
+library(d3heatmap)
+library(htmlwidgets)
+library(tools)
 
 # backend 
 server <- shinyServer(function(input, output) {	
@@ -44,32 +46,30 @@ server <- shinyServer(function(input, output) {
     	read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1)
 							})
 							
-    
-    output$heatmap<-renderD3heatmap(
-    
-    	if(!is.null(datasetInput()))
-    	
- 			d3heatmap( 
-      			datasetInput(),
-      			cexRow=0.5,
-      			colors = input$choose,
-      			k_row = input$color_row_branches,
-      			k_col = input$color_column_branches,
-      			dendrogram = input$dendrogram
-    				)  
-  									)
+	plot <- reactive({
+ 		d3heatmap( 
+      		datasetInput(),
+      		cexRow = as.numeric(as.character(input$xfontsize)),
+      		cexCol = as.numeric(as.character(input$yfontsize)),
+      		colors = input$choose,
+      		k_row = input$color_row_branches,
+      		k_col = input$color_column_branches,
+      		dendrogram = input$dendrogram
+    			 )  
+    })
+	
+	output$heatmap <- renderD3heatmap({
+		if(!is.null(datasetInput()))
+        	plot()
+    })
   									
-	plotInput <- reactive({
-		output$heatmap
-  	})
-  	
-  									
-    output$downloadPlot <- downloadHandler(
-    	filename = function() { 
-    	paste(input$filename, '.png', sep='') },
-    	content = function(file) {
-			ggsave(file)
-    	}
-  	)
+    output$downloadHeatmap <- downloadHandler(
+        filename = function() {
+            paste0(basename(file_path_sans_ext(input$filename)), '.html')
+        },
+        content = function(file) {
+            saveWidget(plot(), file)
+        }
+    )
   
-												})
+})

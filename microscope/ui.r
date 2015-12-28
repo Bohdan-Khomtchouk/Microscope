@@ -32,10 +32,9 @@
 
 # ------------------------------------------------------------------------------------
 
-library(d3heatmap)
 library(shiny)
+library(d3heatmap)
 library(RColorBrewer)
-library(ggplot2)
 
 # frontend
 ui <- shinyUI(pageWithSidebar(
@@ -46,15 +45,17 @@ ui <- shinyUI(pageWithSidebar(
     	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
   		selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
-		selectInput("color_row_branches", "Color Row Branches:", c(1:20)),
-		selectInput("color_column_branches", "Color Column Branches:", c(1:20)),
-		downloadButton('downloadPlot', 'Download Heatmap')
+  		numericInput("color_row_branches", label = h3("Color Row Branches:"), value = 1),
+  		numericInput("color_column_branches", label = h3("Color Column Branches:"), value = 1),
+  		sliderInput("xfontsize", label = h3("X Font Size:"), min = 0.3, max = 2, value = 0.5),
+		sliderInput("yfontsize", label = h3("Y Font Size:"), min = 0.3, max = 2, value = 1.0),
+		downloadButton('downloadHeatmap', 'Download Heatmap')
                ),
                
   mainPanel(
   		tabsetPanel(
   			tabPanel("Instructions", textInput("text", label=h3("Upload a .csv file. Click and drag to zoom in. Click once to zoom out."), value="It's that easy!")),
-  			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "800px", height = "800px"))
+  			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "700px"))
   					)
   			)
 							)
