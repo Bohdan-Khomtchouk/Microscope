@@ -1,4 +1,4 @@
-# Copyright (C) 2015 Bohdan Khomtchouk, James Hennessy, and Vytas Dargis-Robinson
+# Copyright (C) 2015-2016 Bohdan Khomtchouk, Vytas Dargis-Robinson, and James Hennessy
 
 # This file is part of MicroScope.
 
@@ -7,15 +7,15 @@
 # MicroScope is designed with large heatmaps in mind (e.g., gene expression heatmaps with thousands of genes), where individual entries quickly become unreadable as more are added. 
 # However, MicroScope allows you to repeatedly zoom in to any sector of the heatmap to investigate a region, cluster, or even a single gene.  
 # MicroScope also allows you to hover the mouse pointer over any specific gene to show precise expression level details.
+# In addition to visual magnification, MicroScope also allows users to analytically perform real-time statistical analyses with simple button clicks.
+
+# For more information, please see: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics and visualization platform for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694"
 
 # MicroScope is an ongoing bioinformatics software project fully financially supported by the United States Department of Defense (DoD) 
 # through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support 
 # under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
-# Current work is underway to expand Microscope's user-friendly features.
-
-# Please cite: "Khomtchouk et al.: 'MicroScope: magnifying interactive heatmaps using RShiny and JavaScript', 2015 (in preparation)" 
-# within any source that makes use of any methods inspired by MicroScope. 
+# Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics and visualization platform for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ library(shiny)
 library(d3heatmap)
 library(RColorBrewer)
 
+
 # frontend
 ui <- shinyUI(pageWithSidebar(
 
@@ -45,17 +46,21 @@ ui <- shinyUI(pageWithSidebar(
     	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
   		selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
-  		numericInput("color_row_branches", label = h3("Color Row Branches:"), value = 1),
-  		numericInput("color_column_branches", label = h3("Color Column Branches:"), value = 1),
-  		sliderInput("xfontsize", label = h3("X Font Size:"), min = 0.3, max = 2, value = 0.5),
-		sliderInput("yfontsize", label = h3("Y Font Size:"), min = 0.3, max = 2, value = 1.0),
-		downloadButton('downloadHeatmap', 'Download Heatmap')
+  		numericInput("color_row_branches", "Color Row Branches:", value = 1),
+  		numericInput("color_column_branches", "Color Column Branches:", value = 1),
+  		sliderInput("xfontsize", "X Font Size:", min = 0.3, max = 2, value = 0.5),
+		sliderInput("yfontsize", "Y Font Size:", min = 0.3, max = 2, value = 1.0),
+		downloadButton("downloadHeatmap", "Download Heatmap"),
+		uiOutput("ctrlcolumns"),
+		actionButton("goButton", "Do Stats!"),
+		downloadButton("downloadtable", "Download Table")
                ),
                
   mainPanel(
   		tabsetPanel(
-  			tabPanel("Instructions", textInput("text", label=h3("Upload a .csv file. Click and drag to zoom in. Click once to zoom out."), value="It's that easy!")),
-  			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "700px"))
+  		  	tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4")),
+  			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "700px")),
+  			tabPanel("Statistical Analysis", tableOutput("table"))
   					)
   			)
 							)
