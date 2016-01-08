@@ -15,7 +15,7 @@
 # through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support 
 # under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
-# Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics platform and visualization engine for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope.
+# Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics and visualization platform for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ ui <- shinyUI(pageWithSidebar(
   
   sidebarPanel(
     	fileInput("filename", "Choose File To Upload:", accept = c('.csv')),
+    	checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
   		selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
   		selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
   		numericInput("color_row_branches", "Color Row Branches:", value = 1),
@@ -58,7 +59,7 @@ ui <- shinyUI(pageWithSidebar(
                
   mainPanel(
   		tabsetPanel(
-  		  	tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4")),
+  		  	tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5")),
   			tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "700px")),
   			tabPanel("Statistical Analysis", tableOutput("table"))
   					)
