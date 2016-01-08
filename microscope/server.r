@@ -15,7 +15,7 @@
 # through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support 
 # under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
-# Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics platform and visualization engine for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope.
+# Please cite: "Khomtchouk BB, Dargis-Robinson V, Hennessy JR, Wahlestedt C. “MicroScope: real-time statistical analytics and visualization platform for gene expression heatmaps”. bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,9 +44,10 @@ server <- shinyServer(function(input, output) {
 
     #instructions tab
     output$text1 <- renderText({ "0) You can easily make a .csv file by simply saving your Microsoft Excel workbook as a .csv through 'Save As'.  Before saving as a .csv, your Excel file should look something like:" })
-    output$text2 <- renderText({ "1) Upload a .csv file.  Navigate to the Heatmap panel to see the resultant heatmap.  Click and drag anywhere in the heatmap to zoom in.  Click once to zoom out." })
-    output$text3 <- renderText({ "2) To perform statistical analysis on your heatmap AFTER you've loaded in the .csv file, specify your control samples in the sidebar panel marked 'Specify Control Samples:' (by default, the remaining samples will be designated as experimental samples).  After pressing the Do Stats! button, your statistical table will appear in the Statistical Analysis panel." })
-    output$text4 <- renderText({ "3) Feel free to download either the heatmap or the statistical analysis table to your computer using the buttons provided.  For more information, please visit the MicroScope publication." })
+    output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values: read counts per gene per sample).  After you upload your .csv file, you can log-transform your data to normalize it (and the resultant heatmap) automatically within MicroScope." })
+    output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  Click and drag anywhere in the heatmap to zoom in.  Click once to zoom out." })
+    output$text4 <- renderText({ "2) To perform statistical analysis on your heatmap, specify your control samples in the sidebar panel marked 'Specify Control Samples:' (by default, the remaining samples will be designated as experimental samples).  After pressing the Do Stats! button, your statistical table will appear in the Statistical Analysis panel. Positive values of log(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals). " })
+    output$text5 <- renderText({ "3) Feel free to download either the heatmap or the statistical analysis table to your computer using the buttons provided.  For more information, please visit the MicroScope publication." })
 
 
 	#file upload
@@ -97,12 +98,18 @@ server <- shinyServer(function(input, output) {
     		if (input$goButton != 0) write.csv(stats(), file) else return()
     		}
     	)
+    	
 
+	#log2 data transformation
+	log2_datasetInput <- reactive({
+		cpm(datasetInput(), prior.count=2, log=TRUE)
+	})
+	
 	
 	#d3heatmap prep					
 	plot <- reactive({
  		d3heatmap( 
-      		datasetInput(),
+ 			if (input$log2_transformed_data) log2_datasetInput() else datasetInput(),
       		cexRow = as.numeric(as.character(input$xfontsize)),
       		cexCol = as.numeric(as.character(input$yfontsize)),
       		colors = input$choose,
