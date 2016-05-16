@@ -177,7 +177,40 @@ server <- shinyServer(function(input, output) {
       else if(input$Genome == "hg38"){
         library("org.Hs.eg.db")
       }
-    }) 
+      else if(input$Genome == "danRey10"){
+        library("org.Dr.eg.db")
+      }
+      else if(input$Genome == "ce10"){
+        library("org.Ce.eg.db")  
+      }
+      else if(input$Genome == "panTro4"){
+        library("org.Pt.eg.db")  
+      }
+      else if(input$Genome == "rn6"){
+        library("org.Rn.eg.db")  
+      }
+      else if(input$Genome == "dm6"){
+        library("org.Dm.eg.db")  
+      }
+      else if(input$Genome == "sacCer3"){
+        library("org.Sc.sgd.db")  
+      }
+      else if(input$Genome == "xenTro7"){
+        library("MeSH.Xtr.eg.db")  
+      }
+      else if(input$Genome == "galGal4"){
+        library("MeSH.Gga.eg.db")  
+      }
+      else if(input$Genome == "susScr3"){
+        library("org.Ss.eg.db")  
+      }
+      else if(input$Genome == "bosTau8"){
+        library("org.Bt.eg.db")  
+      }
+      else if(input$Genome == "canFam3"){
+        library("org.Cf.eg.db")  
+      }
+    })
   
     GO.wall <<- goseq(pwf, input$Genome, input$geneRef)
     
