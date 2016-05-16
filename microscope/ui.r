@@ -61,7 +61,7 @@ ui <- shinyUI(pageWithSidebar(
     ,
     conditionalPanel(
       condition = "input.goButton == true",
-      selectInput("Genome", "Choose Genome Database:", selected = "mm9", c("Mouse" = "mm9", "Human" = "hg38", "Chimpanzee" = "panTro4", "Rat" = "rn6", "Worm" = "ce10", "Zebrafish" = "danRey10", "Fly" = "dm6", "Yeast" = "sacCer3", "Frog" = "xenTro7", "Chicken" = "galGal4", "Pig" = "susScr3", "Cow" = "bosTau8", "Ebola virus" = "eboVir3", "Dog" = "canFam3", "Cat" = "felCat8")),
+      selectInput("Genome", "Choose Genome Database:", selected = "mm9", c("Mouse" = "mm9", "Human" = "hg38", "Chimpanzee" = "panTro4", "Rat" = "rn6", "Worm" = "ce10", "Zebrafish" = "danRey10", "Fly" = "dm6", "Yeast" = "sacCer3", "Frog" = "xenTro7", "Chicken" = "galGal4", "Pig" = "susScr3", "Cow" = "bosTau8", "Dog" = "canFam3")),
       selectInput("geneRef", "Choose Gene Identifier:", selected = "geneSymbol", c("Gene Symbol" = "geneSymbol", "Ensembl ID" = "ensGene")),
       numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
       selectInput("chooseEnriched", "Stratify Top Gene Ontologies By:", c("P-value", "FDR")),
