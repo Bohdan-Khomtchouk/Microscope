@@ -58,6 +58,18 @@ server <- shinyServer(function(input, output) {
   output$text8 <- renderText({ "6) For more information about this software, please visit the MicroScope publication." })
   
   
+  # sample file download
+  output$downloadData <- downloadHandler(
+  	filename <- function() {
+    	paste('genes', '_file', '.csv', sep='')
+  	},
+  	content <- function(file) {
+    	file.copy("genes_file.csv", file)
+  	},
+  	contentType = "text/csv"
+	)
+	
+  
   # file upload
   datasetInput <- reactive({
     validate(
