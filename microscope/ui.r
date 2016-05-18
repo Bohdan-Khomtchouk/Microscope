@@ -46,6 +46,7 @@ ui <- shinyUI(pageWithSidebar(
   headerPanel("MicroScope"),
   
   sidebarPanel(
+    downloadButton("downloadData", label = "Download Sample Input File"),
     fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
     checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
     selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
