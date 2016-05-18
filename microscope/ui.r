@@ -48,6 +48,7 @@ ui <- shinyUI(pageWithSidebar(
   sidebarPanel(
     downloadButton("downloadData", label = "Download Sample Input File"),
     fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
+    sliderInput("buffer", "Buffer Size:", value = 700, min = 700, max = 20000),
     checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
     selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
     selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
@@ -66,8 +67,8 @@ ui <- shinyUI(pageWithSidebar(
       selectInput("geneRef", "Choose Gene Identifier:", selected = "geneSymbol", c("Gene Symbol" = "geneSymbol", "Ensembl ID" = "ensGene")),
       numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
       selectInput("chooseEnriched", "Stratify Top Gene Ontologies By:", c("P-value", "FDR")),
-	  selectInput("cutoffP", "Choose Gene Ontology P-value Cutoff:", selected = 0.05, c(0.05, 0.01, 0.001)),
-      selectInput("cutoffFdr", "Choose Gene Ontology FDR Cutoff:", selected = 0.05, c(0.1, 0.05, 0.01, 0.001)),
+      sliderInput("cutoffP", "Choose Gene Ontology P-value Cutoff:", min = 0.001, max = 0.1, value = 0.05),
+	  sliderInput("cutoffFdr", "Choose Gene Ontology FDR Cutoff:", min = 0.001, max = 0.1, value = 0.05),
 	  actionButton("goData","Do Gene Ontology Analysis")
     ),
     conditionalPanel(
@@ -81,7 +82,7 @@ ui <- shinyUI(pageWithSidebar(
   mainPanel(
     tabsetPanel(
       tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8")),
-      tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "700px")),
+      tabPanel("Heatmap", uiOutput("heatmapOutput")),
       tabPanel("Statistical Analysis", tableOutput("table")),
       tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
 	  tabPanel("Network Analysis", simpleNetworkOutput("networkData", width= "100%", height="1500px"))

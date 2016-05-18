@@ -68,8 +68,14 @@ server <- shinyServer(function(input, output) {
   	},
   	contentType = "text/csv"
 	)
-	
+
   
+  # set buffer size for big data users
+  output$heatmapOutput <- renderUI({
+	d3heatmapOutput("heatmap", height = paste0(input$buffer, "px"))
+  })
+
+
   # file upload
   datasetInput <- reactive({
     validate(
