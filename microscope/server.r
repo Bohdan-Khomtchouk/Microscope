@@ -109,24 +109,14 @@ server <- shinyServer(function(input, output) {
     	)
     if (length(PCA) != 0){
     	df <- datasetInput()
-    
   		rownames(df) <- c()
-    
   		dm <- data.matrix(df)
-        
   		if (input$Type == "Covariance Matrix") {
-      
   			PCA <<- prcomp(dm, scale = TRUE)
-    
   		}  
-    
   		else if (input$Type == "Correlation Matrix") {
-      
-    
   			PCA <<- prcomp(dm, scale = FALSE)
-    
   		}
-
 		biplot(PCA, scale = 0)
 		mtext("Biplot", line = 3, col = "black", font = 2, cex = 1.2)
     } 
@@ -140,24 +130,14 @@ server <- shinyServer(function(input, output) {
     	)
     if(length(PCA) != 0){
     	df <- datasetInput()
-    
   		rownames(df) <- c()
-    
   		dm <- data.matrix(df)
-        
   		if (input$Type == "Covariance Matrix") {
-      
   			PCA <<- prcomp(dm, scale = TRUE)
-    
   		}  
-    
   		else if (input$Type == "Correlation Matrix") {
-      
-    
   			PCA <<- prcomp(dm, scale = FALSE)
-    
   		}
-
     	screeplot(Screeplot, type = "lines")
     }
   })
@@ -171,24 +151,14 @@ server <- shinyServer(function(input, output) {
     ))}        
     else {
     	df <- datasetInput()
-    
   		rownames(df) <- c()
-    
   		dm <- data.matrix(df)
-        
   		if (input$Type == "Covariance Matrix") {
-      
   			PCA <<- prcomp(dm, scale = TRUE)
-    
   		}  
-    
   		else if (input$Type == "Correlation Matrix") {
-      
-    
   			PCA <<- prcomp(dm, scale = FALSE)
-    
   		}
-
     	summary(PCA)
     }
   }) 
