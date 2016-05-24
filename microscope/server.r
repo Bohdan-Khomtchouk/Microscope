@@ -133,10 +133,10 @@ server <- shinyServer(function(input, output) {
   		rownames(df) <- c()
   		dm <- data.matrix(df)
   		if (input$Type == "Covariance Matrix") {
-  			PCA <<- prcomp(dm, scale = TRUE)
+  			Screeplot <<- prcomp(dm, scale = TRUE)
   		}  
   		else if (input$Type == "Correlation Matrix") {
-  			PCA <<- prcomp(dm, scale = FALSE)
+  			Screeplot <<- prcomp(dm, scale = FALSE)
   		}
     	screeplot(Screeplot, type = "lines")
     }
