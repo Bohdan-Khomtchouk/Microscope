@@ -14,7 +14,6 @@ library(goseq)
 library(networkD3)
 library(data.table)
 library(dplyr)
-library(png)
 
 
 # backend 
