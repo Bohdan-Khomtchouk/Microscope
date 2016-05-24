@@ -101,13 +101,9 @@ server <- shinyServer(function(input, output) {
   )
   
   
-  # PCA biplot
-  output$pca_biplot <- renderPlot({
-    validate(
-    	need(input$pcaButton !=  0, "To generate a biplot, follow the instructions above, then click 'Run PCA'") 
-    	)
-    if (length(PCA) != 0){
-    	df <- datasetInput()
+  # PCA engine
+  PCAfun <- function() {
+      	df <- datasetInput()
   		rownames(df) <- c()
   		dm <- data.matrix(df)
   		if (input$Type == "Covariance Matrix") {
@@ -116,9 +112,17 @@ server <- shinyServer(function(input, output) {
   		else if (input$Type == "Correlation Matrix") {
   			PCA <<- prcomp(dm, scale = FALSE)
   		}
-		biplot(PCA, scale = 0)
-		mtext("Biplot", line = 3, col = "black", font = 2, cex = 1.2)
-    } 
+  	}
+  
+  
+  # PCA biplot
+  output$pca_biplot <- renderPlot({
+    validate(
+    	need(input$pcaButton !=  0, "To generate a biplot, follow the instructions above, then click 'Run PCA'") 
+    	)
+    PCAfun()
+	biplot(PCA, scale = 0)
+	mtext("Biplot", line = 3, col = "black", font = 2, cex = 1.2) 
   })
   
   
@@ -128,7 +132,7 @@ server <- shinyServer(function(input, output) {
     	need(input$pcaButton != 0, "To generate a screeplot, follow the instructions above, then click 'Run PCA'") 
     	)
     if(length(PCA) != 0){
-    	df <- datasetInput()
+  		df <- datasetInput()
   		rownames(df) <- c()
   		dm <- data.matrix(df)
   		if (input$Type == "Covariance Matrix") {
@@ -149,15 +153,7 @@ server <- shinyServer(function(input, output) {
         need(input$goButton != 0, "Table of PCA summary: To conduct principal components analysis, click 'Run PCA'")
     ))}        
     else {
-    	df <- datasetInput()
-  		rownames(df) <- c()
-  		dm <- data.matrix(df)
-  		if (input$Type == "Covariance Matrix") {
-  			PCA <<- prcomp(dm, scale = TRUE)
-  		}  
-  		else if (input$Type == "Correlation Matrix") {
-  			PCA <<- prcomp(dm, scale = FALSE)
-  		}
+		PCAfun()
     	summary(PCA)
     }
   }) 
