@@ -284,37 +284,37 @@ server <- shinyServer(function(input, output) {
     
 	callData <<- reactive({ 
       if(input$Genome == "mm9"){
-        library("org.Mm.eg.db")
+        require("org.Mm.eg.db")
       }
       else if(input$Genome == "hg38"){
-        library("org.Hs.eg.db")
+        require("org.Hs.eg.db")
       }
       else if(input$Genome == "danRey10"){
-        library("org.Dr.eg.db")
+        require("org.Dr.eg.db")
       }
       else if(input$Genome == "ce10"){
-        library("org.Ce.eg.db")  
+        require("org.Ce.eg.db")  
       }
       else if(input$Genome == "panTro4"){
-        library("org.Pt.eg.db")  
+        require("org.Pt.eg.db")  
       }
       else if(input$Genome == "rn6"){
-        library("org.Rn.eg.db")  
+        require("org.Rn.eg.db")  
       }
       else if(input$Genome == "dm6"){
-        library("org.Dm.eg.db")  
+        require("org.Dm.eg.db")  
       }
       else if(input$Genome == "sacCer3"){
-        library("org.Sc.sgd.db")  
+        require("org.Sc.sgd.db")  
       }
       else if(input$Genome == "susScr3"){
-        library("org.Ss.eg.db")  
+        require("org.Ss.eg.db")  
       }
       else if(input$Genome == "bosTau8"){
-        library("org.Bt.eg.db")  
+        require("org.Bt.eg.db")  
       }
       else if(input$Genome == "canFam3"){
-        library("org.Cf.eg.db")  
+        require("org.Cf.eg.db")  
       }
     })
   
