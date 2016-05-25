@@ -21,13 +21,14 @@ server <- shinyServer(function(input, output) {
   
   # instructions tab
   output$text1 <- renderText({ "0) You can easily make a .csv file by simply saving your Microsoft Excel workbook as a .csv through 'Save As'.  Before saving as a .csv, your Excel file should look something like:" })
-  output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values, i.e., read counts per gene per sample) from a ChIP-seq or RNA-seq experiment.  Users with microarray data are advised to only use MicroScope’s heatmap utility (but not the statistical/GO/network analysis utilities).  A sample .csv file is provided under the 'Download Sample Input File' button.  Press that button, save the file to your computer, then click the 'Choose File' button to upload it.  In offbeat cases where the input file is a combination of various standard (or non-standard) delimiters, simply use the 'Text to Columns' feature in Microsoft Excel under the 'Data' tab to parse the file before using MicroScope." })
-  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  If your dataset is extremely big and you do not see a heatmap (or it appears empty), simply drag the 'Buffer Size' button and MicroScope will adapt and allocate resources to your big dataset.  After you see a heatmap, click and drag anywhere in the heatmap to zoom in.  Click once to zoom out.  You may also log-transform your data (and the resultant heatmap) automatically within MicroScope." })
-  output$text4 <- renderText({ "2) To perform statistical analysis on your heatmap, specify your control samples in the sidebar panel marked 'Specify Control Samples'.  By default, all remaining samples will be designated as experimental samples.  After pressing the 'Run Statistics' button, your statistical table will appear in the Statistical Analysis panel. Positive values of log2(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals).  See the MicroScope publication for more details on the statistical analysis. " })
-  output$text5 <- renderText({ "3) Feel free to download either the heatmap or the statistical analysis table to your computer using the buttons provided." })  
-  output$text6 <- renderText({ "4) After generating a heatmap and running statistics on it, navigate to the Gene Ontology panel for detailed instructions about performing GO analysis on the top differentially expressed genes in your heatmap.  You may then download the gene ontology results to your computer." })  
-  output$text7 <- renderText({ "5) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the top differentially expressed genes in your heatmap.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
-  output$text8 <- renderText({ "6) For more information about this software, please visit the MicroScope publication." })
+  output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values, i.e., read counts per gene per sample) from a ChIP-seq or RNA-seq experiment.  Users with microarray data are advised to only use MicroScope’s heatmap and PCA utilities (but not the statistical/GO/network analysis utilities).  A sample .csv file is provided under the 'Download Sample Input File' button.  Press that button, save the file to your computer, then click the 'Choose File' button to upload it.  In offbeat cases where the input file is a combination of various standard (or non-standard) delimiters, simply use the 'Text to Columns' feature in Microsoft Excel under the 'Data' tab to parse the file before using MicroScope." })
+  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  If your dataset is extremely big and you do not see a heatmap (or it appears empty), simply drag the 'Buffer Size' button so that MicroScope can adapt and allocate resources to your big dataset.  After you see a heatmap, click and drag anywhere in the heatmap to zoom in.  Click once to zoom out.  You may also log-transform your data (and the resultant heatmap) automatically within MicroScope." })
+  output$text4 <- renderText({ "2) To perform principal component analysis on your heatmap, specify your matrix type (i.e., covariance or correlation matrix) in the sidebar panel marked 'Choose PCA Option'.  After pressing the 'Run PCA' button, your PCA results will appear in the PCA panel.  See the MicroScope publication for more details on the principal component analysis suite." })
+  output$text5 <- renderText({ "3) To perform differential expression analysis on your heatmap, specify your control samples in the sidebar panel marked 'Specify Control Samples'.  By default, all remaining samples will be designated as experimental samples.  After pressing the 'Run Statistics' button, your statistical table will appear in the DE Analysis panel. Positive values of log2(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals).  See the MicroScope publication for more details on the differential expression analysis." })
+  output$text6 <- renderText({ "4) Feel free to download either the heatmap or the differential expression analysis table to your computer using the buttons provided." })  
+  output$text7 <- renderText({ "5) After generating a heatmap and running statistics (i.e., differential expression analysis) on it, navigate to the Gene Ontology panel for detailed instructions about performing GO analysis on the top differentially expressed genes in your heatmap.  You may then download the gene ontology results to your computer." })  
+  output$text8 <- renderText({ "6) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the top differentially expressed genes in your heatmap.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
+  output$text9 <- renderText({ "7) For more information about this software, please visit the MicroScope publication." })
   
   
   # sample file download
@@ -126,6 +127,36 @@ server <- shinyServer(function(input, output) {
   })
   
   
+  # biplot download								
+  output$downloadBiplot <- downloadHandler(
+    filename <- function() {
+      paste0(basename(file_path_sans_ext(input$filename)), '_biplot', '.png', sep='')
+    },
+    content <- function(file) {
+      if(input$pcaButton != 0) {
+      		png(file)
+      		tiff(
+        		file,
+        		width = 2000,
+        		height = 2000,
+        		units = "px",
+        		pointsize = 12,
+        		res = 300
+      		)
+      		biplot(
+        		PCA,
+        		scale = 0,
+        		col = c("red", "blue")
+      		)
+      		dev.off()
+    	}
+      else {
+        return()
+      }
+    }
+  )
+  
+  
   # PCA screeplot 
   output$pca_screeplot <- renderPlot({
     validate(
@@ -141,16 +172,45 @@ server <- shinyServer(function(input, output) {
   		else if (input$Type == "Correlation Matrix") {
   			Screeplot <<- prcomp(dm, scale = FALSE)
   		}
-    	screeplot(Screeplot, type = "lines")
+    	screeplot(Screeplot, type = "lines")  #Screeplot auto-title
     }
   })
+  
+  
+  # screeplot download								
+  output$downloadScreeplot <- downloadHandler(
+    filename <- function() {
+      paste0(basename(file_path_sans_ext(input$filename)), '_screeplot', '.png', sep='')
+    },
+    content <- function(file) {
+      if(input$pcaButton != 0) {
+      		png(file)
+      		tiff(
+        		file,
+        		width = 4000,
+        		height = 2000,
+        		units = "px",
+        		pointsize = 12,
+        		res = 300
+      		)
+			screeplot(
+				Screeplot, 
+				type = "lines"
+				)
+      		dev.off()
+    	}
+      else {
+        return()
+      }
+    }
+  )
   
   
   # PCA summary info
   output$pca_summary_table <- renderPrint({
     if (input$pcaButton == 0) {return(validate(
-      need(input$filename != 0, "Table of PCA summary: To conduct principal components analysis, please first select a file for input") %then%
-        need(input$goButton != 0, "Table of PCA summary: To conduct principal components analysis, click 'Run PCA'")
+      need(input$filename != 0, "Table of PCA summary: To conduct principal component analysis, please first select a file for input") %then%
+        need(input$goButton != 0, "Table of PCA summary: To conduct principal component analysis, click 'Run PCA'")
     ))}        
     else {
 		PCAfun()
@@ -181,12 +241,12 @@ server <- shinyServer(function(input, output) {
   })
 
 
-  # statistical analysis table
+  # differential expression analysis table
   `%then%` <- shiny:::`%OR%`
   output$table <- renderTable({
     if (input$goButton == 0) {return(validate(
-    	need(input$filename != 0, "To run statistics, please first select a file for input") %then%
-        need(input$goButton != 0, "To run statistics, please select your control samples under 'Specify Control Samples' then click 'Run Statistics'")
+    	need(input$filename != 0, "To run differential expression analysis, please first select a file for input") %then%
+        need(input$goButton != 0, "To run differential expression analysis, please select your control samples under 'Specify Control Samples' then click 'Run Statistics'")
     ))}        
     else {
       stats()
