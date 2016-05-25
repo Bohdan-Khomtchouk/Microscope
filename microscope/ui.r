@@ -34,6 +34,8 @@ ui <- shinyUI(pageWithSidebar(
       condition = "output.heatmap",
       selectInput("Type", "Choose PCA Option:", selected = "Correlation Matrix", c("Covariance Matrix", "Correlation Matrix")),
       actionButton("pcaButton", "Run PCA"),
+      downloadButton("downloadBiplot", "Download PCA Biplot"),
+      downloadButton("downloadScreeplot", "Download PCA Screeplot"),
       uiOutput("ctrlcolumns"),
       actionButton("goButton", "Run Statistics"), 
       downloadButton("downloadtable", "Download Stats Table")
@@ -58,10 +60,10 @@ ui <- shinyUI(pageWithSidebar(
 
   mainPanel(
     tabsetPanel(
-      tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8")),
+      tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8"), textOutput("text9")),
       tabPanel("Heatmap", uiOutput("heatmapOutput")),
       tabPanel("PCA", verbatimTextOutput("pca_summary_table"), plotOutput("pca_screeplot"), plotOutput("pca_biplot")),
-      tabPanel("Statistical Analysis", tableOutput("table")),
+      tabPanel("DE Analysis", tableOutput("table")),
       tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
 	  tabPanel("Network Analysis", simpleNetworkOutput("networkData", width= "100%", height="1500px"))
     )
