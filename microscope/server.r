@@ -307,12 +307,6 @@ server <- shinyServer(function(input, output) {
       else if(input$Genome == "sacCer3"){
         library("org.Sc.sgd.db")  
       }
-      else if(input$Genome == "xenTro7"){
-        library("MeSH.Xtr.eg.db")  
-      }
-      else if(input$Genome == "galGal4"){
-        library("MeSH.Gga.eg.db")  
-      }
       else if(input$Genome == "susScr3"){
         library("org.Ss.eg.db")  
       }
