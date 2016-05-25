@@ -10,7 +10,7 @@ Please cite: "Khomtchouk BB, Hennessy JR, Dargis-Robinson V, Wahlestedt C.  “M
 
 ## Usage (for general public)
 
-##### Just click here!... https://microscope.shinyapps.io/microscope
+##### Just click here!... http://microscopebioinformatics.org/
 
 ## Installation (for developers only)
 
