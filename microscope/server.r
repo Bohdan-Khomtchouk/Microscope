@@ -186,17 +186,17 @@ server <- shinyServer(function(input, output) {
       if(input$pcaButton != 0) {
       		png(file)
       		tiff(
-        		file,
+        	        file,
         		width = 4000,
         		height = 2000,
         		units = "px",
         		pointsize = 12,
         		res = 300
       		)
-			screeplot(
-				Screeplot, 
-				type = "lines"
-				)
+		screeplot(
+			Screeplot, 
+			type = "lines"
+			)
       		dev.off()
     	}
       else {
