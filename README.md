@@ -10,7 +10,7 @@ Please cite: "Khomtchouk BB, Hennessy JR, Dargis-Robinson V, Wahlestedt C.  “M
 
 ## Usage (for general public)
 
-##### Just click here!... http://microscopebioinformatics.org/
+##### http://microscopebioinformatics.org/
 
 ## Installation (for developers only)
 
@@ -59,10 +59,14 @@ Please cite: "Khomtchouk BB, Hennessy JR, Dargis-Robinson V, Wahlestedt C.  “M
 
 ## Screenshots
 
-<img width="1440" alt="heat" src="https://cloud.githubusercontent.com/assets/9893806/13304097/e36c1558-db20-11e5-8b79-83d69fd56ef0.png">
+![fig1](https://cloud.githubusercontent.com/assets/9893806/15684804/cde007c8-2736-11e6-9893-5925d5e15561.png)
 
-<img width="1440" alt="stats" src="https://cloud.githubusercontent.com/assets/9893806/13304104/ea4a1320-db20-11e5-9dbc-f4028f16c6c7.png">
+![fig2](https://cloud.githubusercontent.com/assets/9893806/15684822/f82654c4-2736-11e6-881c-7c4aa47a1960.png)
 
-<img width="1440" alt="go" src="https://cloud.githubusercontent.com/assets/9893806/13304107/eccd508a-db20-11e5-99c2-3ed8f24dd44a.png">
+![fig3](https://cloud.githubusercontent.com/assets/9893806/15684826/fc0498c6-2736-11e6-94a5-358146b825a8.png)
 
-<img width="1440" alt="network" src="https://cloud.githubusercontent.com/assets/9893806/13304111/f0eb4d70-db20-11e5-83b1-b57c3f9a4985.png">
+![fig4](https://cloud.githubusercontent.com/assets/9893806/15684834/04ff3f76-2737-11e6-8c67-d68da29fd676.png)
+
+![fig5](https://cloud.githubusercontent.com/assets/9893806/15684844/0d573c78-2737-11e6-9c0e-c432a8408b3d.png)
+
+![fig6](https://cloud.githubusercontent.com/assets/9893806/15684852/1620700e-2737-11e6-8f06-2c162e247983.png)
