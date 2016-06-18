@@ -2,6 +2,6 @@ name: microscope
 account: microscope
 server: shinyapps.io
 appId: 74105
-bundleId: 379738
+bundleId: 482427
 url: https://microscope.shinyapps.io/microscope/
-when: 1456351249.51411
+when: 1466118393.50183
