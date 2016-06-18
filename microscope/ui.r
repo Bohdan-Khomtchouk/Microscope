@@ -21,7 +21,7 @@ ui <- shinyUI(pageWithSidebar(
   sidebarPanel(
     downloadButton("downloadData", label = "Download Sample Input File"),
     fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
-    sliderInput("buffer", "Buffer Size:", value = 700, min = 700, max = 20000),
+    sliderInput("buffer", "Buffer Size:", value = 700, min = 700, max = 2000000),
     checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
     selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
     selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
@@ -36,13 +36,13 @@ ui <- shinyUI(pageWithSidebar(
       actionButton("pcaButton", "Run PCA"),
       downloadButton("downloadBiplot", "Download PCA Biplot"),
       downloadButton("downloadScreeplot", "Download PCA Screeplot"),
-      uiOutput("ctrlcolumns"),
+      uiOutput("expcolumns"),
       actionButton("goButton", "Run Statistics"), 
       downloadButton("downloadtable", "Download Stats Table")
     ),
     conditionalPanel(
       condition = "input.goButton == true",
-      selectInput("Genome", "Choose Genome Database:", selected = "mm9", c("Mouse" = "mm9", "Human" = "hg38", "Chimpanzee" = "panTro4", "Rat" = "rn6", "Worm" = "ce10", "Zebrafish" = "danRey10", "Fly" = "dm6", "Yeast" = "sacCer3", "Pig" = "susScr3", "Cow" = "bosTau8", "Dog" = "canFam3")),
+      selectInput("Genome", "Choose Genome Database:", selected = "mm9", c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2", "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3")),
       selectInput("geneRef", "Choose Gene Identifier:", selected = "geneSymbol", c("Gene Symbol" = "geneSymbol", "Ensembl ID" = "ensGene")),
       numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
       selectInput("chooseEnriched", "Stratify Top Gene Ontologies By:", c("P-value", "FDR")),
@@ -62,6 +62,7 @@ ui <- shinyUI(pageWithSidebar(
     tabsetPanel(
       tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8"), textOutput("text9")),
       tabPanel("Heatmap", uiOutput("heatmapOutput")),
+      #tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "20000px")),
       tabPanel("PCA", verbatimTextOutput("pca_summary_table"), plotOutput("pca_screeplot"), plotOutput("pca_biplot")),
       tabPanel("DE Analysis", tableOutput("table")),
       tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
