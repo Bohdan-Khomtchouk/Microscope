@@ -21,7 +21,6 @@ ui <- shinyUI(pageWithSidebar(
   sidebarPanel(
     downloadButton("downloadData", label = "Download Sample Input File"),
     fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
-    sliderInput("buffer", "Buffer Size:", value = 700, min = 700, max = 2000000),
     checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
     selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
     selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
@@ -57,12 +56,10 @@ ui <- shinyUI(pageWithSidebar(
     )
   ),
 
-
   mainPanel(
     tabsetPanel(
       tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8"), textOutput("text9")),
-      tabPanel("Heatmap", uiOutput("heatmapOutput")),
-      #tabPanel("Heatmap", d3heatmapOutput("heatmap", width = "100%", height = "20000px")),
+      tabPanel("Heatmap", uiOutput("pixelation")),
       tabPanel("PCA", verbatimTextOutput("pca_summary_table"), plotOutput("pca_screeplot"), plotOutput("pca_biplot")),
       tabPanel("DE Analysis", tableOutput("table")),
       tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
