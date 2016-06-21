@@ -22,7 +22,7 @@ server <- shinyServer(function(input, output) {
   # instructions tab
   output$text1 <- renderText({ "0) You can easily make a .csv file by simply saving your Microsoft Excel workbook as a .csv through 'Save As'.  Before saving as a .csv, your Excel file should look something like:" })
   output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values, i.e., read counts per gene per sample) from a ChIP-seq or RNA-seq experiment.  Users with microarray data are advised to only use MicroScope’s heatmap and PCA utilities (but not the statistical/GO/network analysis utilities).  A sample .csv file is provided under the 'Download Sample Input File' button.  Press that button, save the file to your computer, then click the 'Choose File' button to upload it.  In offbeat cases where the input file is a combination of various standard (or non-standard) delimiters, simply use the 'Text to Columns' feature in Microsoft Excel under the 'Data' tab to parse the file before using MicroScope." })
-  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  If your dataset is extremely big and you do not see a heatmap (or it appears empty), simply drag the 'Buffer Size' button so that MicroScope can adapt and allocate resources to your big dataset.  After you see a heatmap, click and drag anywhere in the heatmap to zoom in.  Click once to zoom out.  You may also log-transform your data (and the resultant heatmap) automatically within MicroScope." })
+  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  After you see a heatmap, click and drag anywhere in the heatmap to zoom in.  Click once to zoom out.  Note that this click-drag-zoom action is not recommended for large input datasets (>= 5000 genes), as you may get unexpectedly disconnected from the R Shiny servers performing this computationally intensive JavaScript-based task.  In cases like this, it is best to either re-login/re-upload/wait, or pre-filter your input dataset down to a set of genes of specific interest.  You may also log-transform your data (and the resultant heatmap) automatically, change color schemes, perform hierarchical clustering, etc." })
   output$text4 <- renderText({ "2) To perform principal component analysis on your heatmap, specify your matrix type (i.e., covariance or correlation matrix) in the sidebar panel marked 'Choose PCA Option'.  After pressing the 'Run PCA' button, your PCA results will appear in the PCA panel.  You may download both the biplot and screeplot to your computer using the buttons provided.  See the MicroScope publication for more details on the principal component analysis suite." })
   output$text5 <- renderText({ "3) To perform differential expression analysis on your heatmap, specify your experimental samples in the sidebar panel marked 'Specify Non-Control Samples'.  By default, all remaining samples will be designated as control samples.  After pressing the 'Run Statistics' button, your statistical table will appear in the DE Analysis panel. Positive values of log2(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals).  See the MicroScope publication for more details on the differential expression analysis." })
   output$text6 <- renderText({ "4) Feel free to download either the heatmap or the differential expression analysis table to your computer using the buttons provided." })  
@@ -41,13 +41,7 @@ server <- shinyServer(function(input, output) {
   	},
   	contentType = "text/csv"
 	)
-
   
-  # set buffer size for big data users
-  output$heatmapOutput <- renderUI({
-	d3heatmapOutput("heatmap", height = paste0(input$buffer, "px"))
-  })
-
 
   # file upload
   datasetInput <- reactive({
@@ -57,7 +51,33 @@ server <- shinyServer(function(input, output) {
     inFile <- input$filename
     if (is.null(inFile)) return(NULL)
     read.table(inFile$datapath, header= TRUE, sep=",", quote='"', row.names=1)
-  })	
+  })
+  
+  
+  # heatmap height
+    output$pixelation <- renderUI({
+  	  inputLines <- NROW(datasetInput())
+      if(inputLines >= 0 && inputLines <= 2001){
+        d3heatmapOutput("heatmap", width = "100%", height = "700px")
+      }
+      else if(inputLines > 2001 && inputLines <= 5001){
+        d3heatmapOutput("heatmap", width = "100%", height = "1500px")
+      }
+      else if(inputLines > 5001 && inputLines <= 10001){
+        d3heatmapOutput("heatmap", width = "100%", height = "3000px")
+      }
+      else if(inputLines > 10001 && inputLines <= 20001){
+        d3heatmapOutput("heatmap", width = "100%", height = "8000px")
+      }
+      else if(inputLines > 20001 && inputLines <= 40001){
+        d3heatmapOutput("heatmap", width = "100%", height = "12000px")
+      }
+      else if(inputLines > 40001 && inputLines <= 60001){
+        d3heatmapOutput("heatmap", width = "100%", height = "18000px")
+      }
+      else
+        d3heatmapOutput("heatmap", width = "100%", height = "30000px")
+    })	
   
   
   # log2 data transformation
