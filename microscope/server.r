@@ -21,13 +21,13 @@ server <- shinyServer(function(input, output) {
   
   # instructions tab
   output$text1 <- renderText({ "0) You can easily make a .csv file by simply saving your Microsoft Excel workbook as a .csv through 'Save As'.  Before saving as a .csv, your Excel file should look something like:" })
-  output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values, i.e., read counts per gene per sample) from a ChIP-seq or RNA-seq experiment.  Users with microarray data are advised to only use MicroScope’s heatmap and PCA utilities (but not the statistical/GO/network analysis utilities).  A sample .csv file is provided under the 'Download Sample Input File' button.  Press that button, save the file to your computer, then click the 'Choose File' button to upload it.  In offbeat cases where the input file is a combination of various standard (or non-standard) delimiters, simply use the 'Text to Columns' feature in Microsoft Excel under the 'Data' tab to parse the file before using MicroScope." })
-  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the Heatmap panel to see the resultant heatmap.  After you see a heatmap, click and drag anywhere in the heatmap to zoom in.  Click once to zoom out.  Note that this click-drag-zoom action is not recommended for large input datasets (>= 5000 genes), as you may get unexpectedly disconnected from the R Shiny servers performing this computationally intensive JavaScript-based task.  In cases like this, it is best to either re-login/re-upload/wait, or pre-filter your input dataset down to a set of genes of specific interest.  You may also log-transform your data (and the resultant heatmap) automatically, change color schemes, perform hierarchical clustering, etc." })
-  output$text4 <- renderText({ "2) To perform principal component analysis on your heatmap, specify your matrix type (i.e., covariance or correlation matrix) in the sidebar panel marked 'Choose PCA Option'.  After pressing the 'Run PCA' button, your PCA results will appear in the PCA panel.  You may download both the biplot and screeplot to your computer using the buttons provided.  See the MicroScope publication for more details on the principal component analysis suite." })
-  output$text5 <- renderText({ "3) To perform differential expression analysis on your heatmap, specify your experimental samples in the sidebar panel marked 'Specify Non-Control Samples'.  By default, all remaining samples will be designated as control samples.  After pressing the 'Run Statistics' button, your statistical table will appear in the DE Analysis panel. Positive values of log2(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals).  See the MicroScope publication for more details on the differential expression analysis." })
-  output$text6 <- renderText({ "4) Feel free to download either the heatmap or the differential expression analysis table to your computer using the buttons provided." })  
-  output$text7 <- renderText({ "5) After generating a heatmap and running statistics (i.e., differential expression analysis) on it, navigate to the Gene Ontology panel for detailed instructions about performing GO analysis on the top differentially expressed genes in your heatmap.  You may then download the gene ontology results to your computer." })  
-  output$text8 <- renderText({ "6) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the top differentially expressed genes in your heatmap.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
+  output$text2 <- renderText({ "Please note that all cell values must be positive (i.e., corresponding to raw gene expression values, i.e., read counts per gene per sample) from a ChIP-seq or RNA-seq experiment.  A sample .csv file is provided under the 'Download Sample Input File' button.  Press that button, save the file to your computer, then click the 'Choose File' button to upload it.  In offbeat cases where the input file is a combination of various standard (or non-standard) delimiters, simply use the 'Text to Columns' feature in Microsoft Excel under the 'Data' tab to parse the file before using MicroScope." })
+  output$text3 <- renderText({ "1) After uploading a .csv file, navigate to the DE analysis tab, and specify 'Non-Control Samples' in the box below the button. By default, all remaining samples will be designated as control samples. After pressing the 'Run Statistics' button, your statistical table will appear in the DE Analysis panel. Positive values of log2(FC) (i.e., fold change) indicate upregulation in experimental samples (i.e., experimental samples have higher expression values relative to controls). Negative values indicate downregulation in experimental samples (i.e., control samples have higher expression values relative to experimentals). See the MicroScope publication for more details on the differential expression analysis." })
+  output$text4 <- renderText({ "2) To draw a heatmap of these differential expression results, choose whether you want to use either the FDR cutoff or the P-value cutoff or both, by using the selection inputs (this will only impact the heatmap itself).  After clicking the 'Draw Heatmap' button, navigate to the Heatmap panel to see the resultant heatmap. After you see a heatmap, click and drag anywhere in the heatmap to zoom in. Click once to zoom out. Note that this click-drag-zoom action is not recommended for large input datasets (>= 5000 genes), as you may get unexpectedly disconnected from the R Shiny servers performing this computationally intensive JavaScript-based task. In cases like this, it is best to either re-login/re-upload/wait, or pre-filter your input dataset down to a set of genes of specific interest. You may also log-transform your data (and the resultant heatmap) automatically, change color schemes, perform hierarchical clustering, etc.." })
+  output$text5 <- renderText({ "3) To perform principal component analysis on your heatmap, specify your matrix type (i.e., covariance or correlation matrix) in the sidebar panel marked 'Choose PCA Option'.  After pressing the 'Run PCA' button, your PCA results will appear in the PCA panel.  You may download both the biplot and screeplot to your computer using the buttons provided.  See the MicroScope publication for more details on the principal component analysis suite." })
+  output$text6 <- renderText({ "4) Feel free to download either the heatmap, PCA graphs, and/or differential expression analysis table to your computer using the buttons provided." })  
+  output$text7 <- renderText({ "5) You may now navigate to the Gene Ontology panel for detailed instructions about performing GO analysis on the differentially expressed genes.  You may then download the gene ontology results to your computer." })  
+  output$text8 <- renderText({ "6) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the differentially expressed genes.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
   output$text9 <- renderText({ "7) For more information about this software, please visit the MicroScope publication." })
   
   
@@ -46,7 +46,7 @@ server <- shinyServer(function(input, output) {
   # file upload
   datasetInput <- reactive({
     validate(
-    	need(input$filename != 0, "To generate a heatmap, please select a file for input") 
+    	need(input$filename != 0, "To perform statistical analysis, please select a file for input") 
     )
     inFile <- input$filename
     if (is.null(inFile)) return(NULL)
@@ -54,9 +54,33 @@ server <- shinyServer(function(input, output) {
   })
   
   
+  # filter stats table based on cutoffs
+  slimStats <- reactive({
+    results_df <- stats()
+    datasetInputTwo <- datasetInput()
+
+    if (input$pvFDRchoose == "Pvalue"){
+        pNewResults_df <- results_df[which(results_df$PValue<input$statPV),]
+        pNames <- row.names(pNewResults_df)
+        pFinalResult <- datasetInputTwo[pNames,]
+    }
+    else if(input$pvFDRchoose == "FDR"){
+        fNewResults_df <- results_df[which(results_df$FDR<input$statFDR),]
+        fNames <- row.names(fNewResults_df)
+        fFinalResult <- datasetInputTwo[fNames,]
+    }
+    else if(input$pvFDRchoose == "both"){
+        bNewResults_df <- results_df[which(results_df$FDR<input$statFDR & results_df$PValue<input$statPV),]
+        bNames <- row.names(bNewResults_df)
+        bFinalResult <- datasetInputTwo[bNames,]
+    }
+  })
+  
+  
   # heatmap height
     output$pixelation <- renderUI({
-  	  inputLines <- NROW(datasetInput())
+      slimStats()
+      inputLines <- NROW(slimStats())
       if(inputLines >= 0 && inputLines <= 2001){
         d3heatmapOutput("heatmap", width = "100%", height = "700px")
       }
@@ -82,21 +106,28 @@ server <- shinyServer(function(input, output) {
   
   # log2 data transformation
   log2_datasetInput <- reactive({
-    cpm(datasetInput(), prior.count=2, log=TRUE)
+    slimStats()
+    cpm(slimStats(), prior.count=2, log=TRUE)
   })
 
 
   # d3heatmap prep					
   plot <- reactive({
-    d3heatmap( 
-      if (input$log2_transformed_data) log2_datasetInput() else datasetInput(),
-      cexRow = as.numeric(as.character(input$xfontsize)),
-      cexCol = as.numeric(as.character(input$yfontsize)),
-      colors = input$choose,
-      k_row = input$color_row_branches,
-      k_col = input$color_column_branches,
-      dendrogram = input$dendrogram
-    )  
+    if (input$goButtonHeat == 0) {return(validate(
+      need(input$filename != 0, "To create a heatmap, please first select a file for input"),
+      need(input$goButtonHeat !=0 , "To create a heatmap showing statistically significant genes, first specify your parameters and then press 'Draw Heatmap' button")
+    ))}   
+    else {
+    	d3heatmap( 
+      		if (input$log2_transformed_data) log2_datasetInput() else slimStats(),
+      		cexRow = as.numeric(as.character(input$xfontsize)),
+      		cexCol = as.numeric(as.character(input$yfontsize)),
+      		colors = input$choose,
+      		k_row = input$color_row_branches,
+      		k_col = input$color_column_branches,
+      		dendrogram = input$dendrogram
+    	)  
+  	}
   })
   
   
@@ -124,7 +155,7 @@ server <- shinyServer(function(input, output) {
   
   # PCA engine
   PCAfun <- function() {
-      	df <- datasetInput()
+      df <- datasetInput()
   		rownames(df) <- c()
   		dm <- data.matrix(df)
   		if (input$Type == "Covariance Matrix") {
@@ -139,7 +170,7 @@ server <- shinyServer(function(input, output) {
   # PCA biplot
   output$pca_biplot <- renderPlot({
     validate(
-    	need(input$pcaButton !=  0, "To generate a biplot, follow the instructions above, then click 'Run PCA'") 
+    	need(input$pcaButton !=  0, "To generate a biplot, then click 'Run PCA'") 
     	)
     PCAfun()
 	biplot(PCA, scale = 0)
@@ -180,7 +211,7 @@ server <- shinyServer(function(input, output) {
   # PCA screeplot 
   output$pca_screeplot <- renderPlot({
     validate(
-    	need(input$pcaButton != 0, "To generate a screeplot, follow the instructions above, then click 'Run PCA'") 
+    	need(input$pcaButton != 0, "To generate a screeplot, click 'Run PCA'") 
     	)
     if(length(PCA) != 0){
   		df <- datasetInput()
@@ -259,8 +290,8 @@ server <- shinyServer(function(input, output) {
     results <- topTags(et, n=50000)
     results_df <- as.data.frame(results)
   })
-
-
+  
+  
   # differential expression analysis table
   `%then%` <- shiny:::`%OR%`
   output$table <- renderTable({
@@ -355,7 +386,7 @@ server <- shinyServer(function(input, output) {
     else if(input$chooseEnriched == "P-value") ({
     	enriched.GO <<- GO.wall$category[(GO.wall$over_represented_pvalue) < input$cutoffP]
     })
-    
+      
   })
   
   
@@ -471,8 +502,5 @@ server <- shinyServer(function(input, output) {
     		return()
     	}
     }
-  )
-  
-
-  
+  ) 
 })
