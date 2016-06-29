@@ -2,7 +2,7 @@
 
 ## About
 
-MicroScope is a user-friendly ChIP-seq and RNA-seq software suite designed for the interactive visualization and analysis of gene expression heatmaps, including integrated features to support: principal component analysis, differential expression analysis, gene ontology analysis, and dynamic network visualization of genes directly from a heatmap.
+We propose a user-friendly ChIP-seq and RNA-seq software suite for the interactive visualization and analysis of genomic data, including integrated features to support differential expression analysis, interactive heatmap production, principal component analysis, gene ontology analysis, and dynamic network visualization.
 
 MicroScope is financially supported by the United States Department of Defense (DoD) through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
@@ -59,14 +59,9 @@ Please cite: "Khomtchouk BB, Hennessy JR, Dargis-Robinson V, Wahlestedt C.  “M
 
 ## Screenshots
 
-![fig1](https://cloud.githubusercontent.com/assets/9893806/15684804/cde007c8-2736-11e6-9893-5925d5e15561.png)
-
-![fig2](https://cloud.githubusercontent.com/assets/9893806/15684822/f82654c4-2736-11e6-881c-7c4aa47a1960.png)
-
-![fig3](https://cloud.githubusercontent.com/assets/9893806/15684826/fc0498c6-2736-11e6-94a5-358146b825a8.png)
-
-![fig4](https://cloud.githubusercontent.com/assets/9893806/15684834/04ff3f76-2737-11e6-8c67-d68da29fd676.png)
-
-![fig5](https://cloud.githubusercontent.com/assets/9893806/15684844/0d573c78-2737-11e6-9c0e-c432a8408b3d.png)
-
-![fig6](https://cloud.githubusercontent.com/assets/9893806/15684852/1620700e-2737-11e6-8f06-2c162e247983.png)
+![fig1](https://cloud.githubusercontent.com/assets/9893806/16438422/aac3ba7a-3d7d-11e6-867d-8aaf8d6b7e86.png)
+![fig2](https://cloud.githubusercontent.com/assets/9893806/16438431/bc6c3a68-3d7d-11e6-9fdf-e570865c906d.png)
+![fig3](https://cloud.githubusercontent.com/assets/9893806/16438436/c1a096fa-3d7d-11e6-9c35-d80c97dd0e2d.png)
+![fig4](https://cloud.githubusercontent.com/assets/9893806/16438438/c4be0be2-3d7d-11e6-9381-1101206ade6d.png)
+![fig5](https://cloud.githubusercontent.com/assets/9893806/16438441/c999fd10-3d7d-11e6-8dd6-65d37ab43e06.png)
+![fig6](https://cloud.githubusercontent.com/assets/9893806/16438443/ceb93b62-3d7d-11e6-817c-c12dee745c9b.png)
