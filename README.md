@@ -60,6 +60,7 @@ Please cite: "Khomtchouk BB, Hennessy JR, Dargis-Robinson V, Wahlestedt C.  “M
 ## Screenshots
 
 ![fig1](https://cloud.githubusercontent.com/assets/9893806/16438422/aac3ba7a-3d7d-11e6-867d-8aaf8d6b7e86.png)
+<img width="655" alt="fig1 1" src="https://cloud.githubusercontent.com/assets/9893806/16439227/4d076060-3d84-11e6-9d39-4d54728ed232.png">
 ![fig2](https://cloud.githubusercontent.com/assets/9893806/16438431/bc6c3a68-3d7d-11e6-9fdf-e570865c906d.png)
 ![fig3](https://cloud.githubusercontent.com/assets/9893806/16438436/c1a096fa-3d7d-11e6-9c35-d80c97dd0e2d.png)
 ![fig4](https://cloud.githubusercontent.com/assets/9893806/16438438/c4be0be2-3d7d-11e6-9381-1101206ade6d.png)
