@@ -28,7 +28,7 @@ server <- shinyServer(function(input, output) {
   output$text6 <- renderText({ "4) Feel free to download either the heatmap, PCA graphs, and/or differential expression analysis table to your computer using the buttons provided." })  
   output$text7 <- renderText({ "5) You may now navigate to the Gene Ontology panel for detailed instructions about performing GO analysis on the differentially expressed genes.  You may then download the gene ontology results to your computer." })  
   output$text8 <- renderText({ "6) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the differentially expressed genes.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
-  output$text9 <- renderText({ "7) For more information about this software, please visit the MicroScope publication." })
+  output$text9 <- renderText({ "7) For more information about this software, please visit the MicroScope publication.  To run MicroScope on a new dataset, simply refresh the page or open a new browser window." })
   
   
   # sample file download
@@ -79,6 +79,7 @@ server <- shinyServer(function(input, output) {
   
   # heatmap height
     output$pixelation <- renderUI({
+     
       slimStats()
       inputLines <- NROW(slimStats())
       if(inputLines >= 0 && inputLines <= 2001){
@@ -101,6 +102,7 @@ server <- shinyServer(function(input, output) {
       }
       else
         d3heatmapOutput("heatmap", width = "100%", height = "30000px")
+      
     })	
   
   
@@ -113,9 +115,11 @@ server <- shinyServer(function(input, output) {
 
   # d3heatmap prep					
   plot <- reactive({
+    df = slimStats()
     if (input$goButtonHeat == 0) {return(validate(
       need(input$filename != 0, "To create a heatmap, please first select a file for input"),
-      need(input$goButtonHeat !=0 , "To create a heatmap showing statistically significant genes, first specify your parameters and then press 'Draw Heatmap' button")
+      need(input$goButtonHeat !=0 , "To create a heatmap showing statistically significant genes, first specify your parameters and then press 'Draw Heatmap' button"),
+      need(!is.null(df), "No heatmap to display at these statistical cutoff parameters")
     ))}   
     else {
     	d3heatmap( 
@@ -155,7 +159,7 @@ server <- shinyServer(function(input, output) {
   
   # PCA engine
   PCAfun <- function() {
-      df <- datasetInput()
+        df <- datasetInput()
   		rownames(df) <- c()
   		dm <- data.matrix(df)
   		if (input$Type == "Covariance Matrix") {
@@ -235,21 +239,21 @@ server <- shinyServer(function(input, output) {
     },
     content <- function(file) {
       if(input$pcaButton != 0) {
-      		png(file)
-      		tiff(
-        	        file,
-        		width = 4000,
-        		height = 2000,
-        		units = "px",
-        		pointsize = 12,
-        		res = 300
+      	png(file)
+      	tiff(
+        	file,
+        	width = 4000,
+        	height = 2000,
+        	units = "px",
+        	pointsize = 12,
+        	res = 300
       		)
 		screeplot(
 			Screeplot, 
 			type = "lines"
 			)
-      		dev.off()
-    	}
+      	dev.off()
+      }
       else {
         return()
       }
@@ -281,6 +285,8 @@ server <- shinyServer(function(input, output) {
   
   # edgeR statistical engine
   stats <- reactive({
+    if(!is.null(datasetInput()) & !is.null(input$expcolumns)){
+   
     group <- as.numeric(names(datasetInput()) %in% input$expcolumns)
     y <- DGEList(counts = datasetInput(), group = group)
     y <- calcNormFactors(y)
@@ -289,6 +295,8 @@ server <- shinyServer(function(input, output) {
     et <- exactTest(y)
     results <- topTags(et, n=50000)
     results_df <- as.data.frame(results)
+      
+    }
   })
   
   
