@@ -1,3 +1,5 @@
+![microscopelogo](https://cloud.githubusercontent.com/assets/9893806/16899036/e975190a-4bc2-11e6-85c7-57e8cfc0ddde.png)
+
 # MicroScope
 
 ## About
