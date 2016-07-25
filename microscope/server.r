@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2016 Bohdan Khomtchouk, James Hennessy, and Vytas Dargis-Robinson
+# Copyright (C) 2015-2016 Bohdan Khomtchouk and James Hennessy
 
 # This file is part of MicroScope.
 
@@ -14,7 +14,7 @@ library(goseq)
 library(networkD3)
 library(data.table)
 library(dplyr)
-
+library(png)
 
 # backend 
 server <- shinyServer(function(input, output) {	
@@ -30,7 +30,7 @@ server <- shinyServer(function(input, output) {
   output$text8 <- renderText({ "6) After performing GO analysis, navigate to the Network Analysis panel for information about performing network analysis on the differentially expressed genes.  You may interact with the resultant network by clicking, zooming, and dragging any element of the network.  You may also download the network analysis results to your computer." })  
   output$text9 <- renderText({ "7) For more information about this software, please visit the MicroScope publication.  To run MicroScope on a new dataset, simply refresh the page or open a new browser window." })
   
-  
+
   # sample file download
   output$downloadData <- downloadHandler(
   	filename <- function() {
