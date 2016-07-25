@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2016 Bohdan Khomtchouk, James Hennessy, and Vytas Dargis-Robinson
+# Copyright (C) 2015-2016 Bohdan Khomtchouk and James Hennessy
 
 # This file is part of MicroScope.
 
@@ -15,16 +15,14 @@ library(networkD3)
 
 # frontend
 ui <- shinyUI(pageWithSidebar(
-  
-  headerPanel("MicroScope"),
-  
+  headerPanel(h1(a(img(src = "logo.jpeg", align = "left", width = "100%"), href = "http://dx.doi.org/10.1101/034694"), "Microscope")),
   sidebarPanel(
+    helpText(a("Click Here for the Source Code on Github!", href = "https://github.com/Bohdan-Khomtchouk/Microscope", target = "_blank")),
     downloadButton("downloadData", label = "Download Sample Input File"),
     fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
     uiOutput("expcolumns"),
     actionButton("goButton", "Run Statistics"),
     downloadButton("downloadtable", "Download Stats Table"),
-    
     conditionalPanel(
       condition = "input.goButton == true",
       selectInput("pvFDRchoose", "Choose Heatmap Statistical Criterion:", selected = "Pvalue", c("Pvalue", "FDR", "FDR and PValue" = "both")
@@ -77,6 +75,7 @@ ui <- shinyUI(pageWithSidebar(
   ),
 
   mainPanel(
+  
     tabsetPanel(
       tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8"), textOutput("text9")),
       tabPanel("DE Analysis", tableOutput("table")),
@@ -84,8 +83,13 @@ ui <- shinyUI(pageWithSidebar(
       tabPanel("PCA", verbatimTextOutput("pca_summary_table"), plotOutput("pca_screeplot"), plotOutput("pca_biplot")),
       tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
 	  tabPanel("Network Analysis", simpleNetworkOutput("networkData", width= "100%", height="1500px"))
-    )
+	  ),
+	   
+	  width = 8,
+	  height = 10
+	  
   )
+
 
 )
 )
