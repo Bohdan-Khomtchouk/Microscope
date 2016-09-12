@@ -8,7 +8,7 @@ We propose a user-friendly ChIP-seq and RNA-seq software suite for the interacti
 
 MicroScope is financially supported by the United States Department of Defense (DoD) through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
 
-Please cite: "Khomtchouk BB, Hennessy JR, Wahlestedt C.  “MicroScope: ChIP-seq and RNA-seq software analysis suite for gene expression heatmaps” (submitted). bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope. 
+Please cite: "Khomtchouk BB, Hennessy JR, Wahlestedt C.  “MicroScope: ChIP-seq and RNA-seq software analysis suite for gene expression heatmaps” BMC Bioinformatics.  2016 (in press). bioRxiv doi: http://dx.doi.org/10.1101/034694" within any source that makes use of any methods inspired by MicroScope. 
 
 ## Usage (for general public)
 
@@ -27,6 +27,7 @@ Please cite: "Khomtchouk BB, Hennessy JR, Wahlestedt C.  “MicroScope: ChIP-seq
 * `setwd("~/path/to/my_directory/Microscope")`
 * `install.packages("shiny")`
 * `library(shiny)`
+* `library(shinyapps)`
 * `install.packages("d3heatmap")`
 * `library(d3heatmap)`
 * `install.packages("RColorBrewer")`
