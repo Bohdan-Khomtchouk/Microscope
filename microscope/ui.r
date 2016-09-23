@@ -1,60 +1,95 @@
-# Copyright (C) 2015 Bohdan Khomtchouk, James Hennessy, and Vytas Dargis-Robinson
+# Copyright (C) 2015-2016 Bohdan Khomtchouk and James Hennessy
 
 # This file is part of MicroScope.
 
-# MicroScope is an RShiny and JavaScript (D3.js) software program designed to produce dynamic, interactive heatmaps in an Internet browser.
-# MicroScope allows you to magnify any portion of a heatmap by a simple click-and-drag feature to zoom in, and click-once feature to zoom out.
-# MicroScope is designed with large heatmaps in mind (e.g., gene expression heatmaps with thousands of genes), where individual entries quickly become unreadable as more are added. 
-# However, MicroScope allows you to repeatedly zoom in to any sector of the heatmap to investigate a region, cluster, or even a single gene.  
-# MicroScope also allows you to hover the mouse pointer over any specific gene to show precise expression level details.
-
-# MicroScope is an ongoing bioinformatics software project fully financially supported by the United States Department of Defense (DoD) 
-# through the National Defense Science and Engineering Graduate Fellowship (NDSEG) Program. This research was conducted with Government support 
-# under and awarded by DoD, Army Research Office (ARO), National Defense Science and Engineering Graduate (NDSEG) Fellowship, 32 CFR 168a.
-
-# Current work is underway to expand Microscope's user-friendly features.
-
-# Please cite: "Khomtchouk et al.: 'MicroScope: magnifying interactive heatmaps using RShiny and JavaScript', 2015 (in preparation)" 
-# within any source that makes use of any methods inspired by MicroScope. 
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 # ------------------------------------------------------------------------------------
 
-
-library(d3heatmap)
 library(shiny)
+library(d3heatmap)
 library(RColorBrewer)
+library(edgeR)
+library(GO.db)
+library(goseq)
+library(networkD3)
 
-pwd<-"/path/to/my_directory/MICROSCOPE/genes_file.csv"
-genes<-read.csv(pwd, header= TRUE, sep=",", quote= '"',row.names=1)
-genes.numeric <- data.matrix(genes)
 
+# frontend
+ui <- shinyUI(pageWithSidebar(
+  headerPanel(h1(a(img(src = "logo.jpeg", align = "left", width = "100%"), href = "http://dx.doi.org/10.1101/034694"), "Microscope")),
+  sidebarPanel(
+    helpText(a("Click Here for the Source Code on Github!", href = "https://github.com/Bohdan-Khomtchouk/Microscope", target = "_blank")),
+    downloadButton("downloadData", label = "Download Sample Input File"),
+    fileInput("filename", "Choose File to Upload:", accept = c('.csv')),
+    uiOutput("expcolumns"),
+    actionButton("goButton", "Run Statistics"),
+    downloadButton("downloadtable", "Download Stats Table"),
+    conditionalPanel(
+      condition = "input.goButton == true",
+      selectInput("pvFDRchoose", "Choose Heatmap Statistical Criterion:", selected = "Pvalue", c("Pvalue", "FDR", "FDR and PValue" = "both")
+    ),
+    conditionalPanel(
+      condition= "input.pvFDRchoose == 'FDR' | input.pvFDRchoose == 'both'",
+      sliderInput("statFDR", "Choose Cutoff for FDR in Heatmap", min = 0.001, max = 0.1, value = 0.1)
+    ),
+    conditionalPanel(
+      condition= "input.pvFDRchoose == 'Pvalue' | input.pvFDRchoose == 'both'",
+      sliderInput("statPV", "Choose Cutoff for Pvalues in Heatmap", min = 0.001, max = 0.05, value = 0.05)
+    ),
+    
+    checkboxInput("log2_transformed_data", "log2 Transform Heatmap"),
+    selectInput("choose", "Choose Color Scheme:", c("YlOrRd", "YlOrBr", "YlGnBu", "YlGn", "Reds", "RdPu", "Purples", "PuRd", "PuBuGn", "PuBu", "OrRd", "Oranges", "Greys", "Greens", "GnBu", "BuPu", "BuGn", "Blues")),
+    selectInput("dendrogram", "Apply Clustering:", c("none", "row", "column", "both")),
+    numericInput("color_row_branches", "Color Row Branches:", value = 1),
+    numericInput("color_column_branches", "Color Column Branches:", value = 1),
+    sliderInput("xfontsize", "Choose X Font Size:", min = 0.3, max = 2, value = 0.5),
+    sliderInput("yfontsize", "Choose Y Font Size:", min = 0.3, max = 2, value = 1.0),
+    actionButton("goButtonHeat", "Draw Heatmap"),
+    downloadButton("downloadHeatmap", "Download Heatmap")
+    ),
+    
+    conditionalPanel(
+      condition = "input.goButtonHeat == true",
+      selectInput("Type", "Choose PCA Option:", selected = "Correlation Matrix", c("Covariance Matrix", "Correlation Matrix")),
+      actionButton("pcaButton", "Run PCA"),
+      downloadButton("downloadBiplot", "Download PCA Biplot"),
+      downloadButton("downloadScreeplot", "Download PCA Screeplot")
+      ),
+      
+    conditionalPanel(
+      condition = "input.pcaButton == true",  
+      selectInput("Genome", "Choose Genome Database:", selected = "mm9", c("Mouse" = "mm9", "Human" = "hg19", "Chimpanzee" = "panTro2", "Rat" = "rn4", "Worm" = "ce6", "Zebrafish" = "danRer6", "Fly" = "dm3", "Yeast" = "sacCer2", "Cow" = "bosTau4", "Dog" = "canFam2", "Anopheles gambiae" = "anoGam1", "Rhesus" = "rheMac2", "Frog" = "xenTro2", "Chicken" = "galGal3")),
+      selectInput("geneRef", "Choose Gene Identifier:", selected = "geneSymbol", c("Gene Symbol" = "geneSymbol", "Ensembl ID" = "ensGene")),
+      numericInput("numberGenes", "Choose How Many Top Gene Ontologies to Display:", value = 10),
+      selectInput("chooseEnriched", "Stratify Top Gene Ontologies By:", c("P-value", "FDR")),
+      sliderInput("cutoffP", "Choose Gene Ontology P-value Cutoff:", min = 0.001, max = 0.1, value = 0.05),
+	  sliderInput("cutoffFdr", "Choose Gene Ontology FDR Cutoff:", min = 0.001, max = 0.1, value = 0.05),
+	  actionButton("goData", "Do Gene Ontology Analysis")
+    ),
+    
+    conditionalPanel(
+      condition = "input.goData == true",
+      actionButton("doNets", "Do Network Analysis"),
+      downloadButton("downloadSimpleNetwork", "Download Network")
+    )
+    
+  ),
 
-shinyUI(pageWithSidebar(
-  headerPanel("MicroScope"),
-  
-  tags$hr(),
-  
   mainPanel(
-	tabsetPanel(
-	
-	type="tabs",
-	
-	tabPanel("Interactive! Heatmap", d3heatmap(genes.numeric, dendrogram ="row", color = brewer.pal(3, "RdYlBu"), width = "150%", height = "1000px", cexRow=0.5)),
-	
-	tabPanel("Instructions",textInput("text", label=h3("Click-and-drag to zoom in. Click-once to zoom out."), value="It's that easy!"))
+  
+    tabsetPanel(
+      tabPanel("Instructions", textOutput("text1"), img(src='excel.png'), textOutput("text2"), textOutput("text3"), textOutput("text4"), textOutput("text5"), textOutput("text6"), textOutput("text7"), textOutput("text8"), textOutput("text9")),
+      tabPanel("DE Analysis", tableOutput("table")),
+      tabPanel("Heatmap", uiOutput("pixelation")),
+      tabPanel("PCA", verbatimTextOutput("pca_summary_table"), plotOutput("pca_screeplot"), plotOutput("pca_biplot")),
+      tabPanel("Gene Ontology" , verbatimTextOutput("gene_ontology")),
+	  tabPanel("Network Analysis", simpleNetworkOutput("networkData", width= "100%", height="1500px"))
+	  ),
+	   
+	  width = 8,
+	  height = 10
+	  
+  )
+
+
 )
 )
-  ))
